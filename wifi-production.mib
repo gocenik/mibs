@@ -1,0 +1,2158 @@
+
+-- File Name : EMTA-WIFI-PRODUCTION-MIB.mib
+-- Date      : Fri May 18 06:16:12 GMT 2018
+-- Author    : AdventNet Agent Toolkit C Edition - MibEditor 6
+
+
+
+EMTA-WIFI-PRODUCTION-MIB	DEFINITIONS ::= BEGIN
+	IMPORTS
+		DisplayString, TruthValue, MacAddress, RowStatus
+			FROM SNMPv2-TC
+		enterprises, MODULE-IDENTITY, OBJECT-TYPE, Integer32, IpAddress, TimeTicks
+			FROM SNMPv2-SMI;
+
+	sdmc	MODULE-IDENTITY
+		LAST-UPDATED	"201909051606Z"
+		ORGANIZATION	"Organization"
+		CONTACT-INFO	"Contact-info"
+		DESCRIPTION		"Description"
+		REVISION		"201909051606Z"
+		DESCRIPTION		""
+		::=  {  enterprises  57345  }
+
+	networkProd	OBJECT IDENTIFIER
+		::=  {  sdmc  1  }
+
+	gateway	OBJECT IDENTIFIER
+		::=  {  networkProd  3  }
+
+	gatewayProdSetup	OBJECT IDENTIFIER
+		::=  {  gateway  1  }
+
+	gatewayProdInformationSetup	OBJECT IDENTIFIER
+		::=  {  gatewayProdSetup  1  }
+
+	gatewayProdManufacturingSetup	OBJECT IDENTIFIER
+		::=  {  gatewayProdSetup  2  }
+
+	gatewayProdManagementSetup	OBJECT IDENTIFIER
+		::=  {  gatewayProdSetup  3  }
+
+	gatewayProdNetworkSetup	OBJECT IDENTIFIER
+		::=  {  gatewayProdSetup  4  }
+
+	gatewayProdFirewallSetup	OBJECT IDENTIFIER
+		::=  {  gatewayProdSetup  5  }
+
+	gatewayProdWireless2GSetup	OBJECT IDENTIFIER
+		::=  {  gatewayProdSetup  6  }
+
+	gatewayProdWireless5GSetup	OBJECT IDENTIFIER
+		::=  {  gatewayProdSetup  7  }
+		
+	gatewayProdGreSetup	OBJECT IDENTIFIER
+		::=  {  gatewayProdSetup  8  }
+
+	gatewayProdSnmpAccessControl	OBJECT-TYPE
+		SYNTAX			INTEGER  { maxaccess ( 1 ) , limitedaccess ( 2 ) , nonaccessible ( 3 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"This object controls the SNMP access level.  The value of this object is stored into the Flash and will be operational after next reboot."
+		::=  {  gatewayProdManufacturingSetup  1  }
+
+	gatewayProdOperationMode	OBJECT-TYPE
+		SYNTAX			INTEGER  { router ( 0 ) , bridge ( 1 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"System Operation Mode."
+		::=  {  gatewayProdManufacturingSetup  2  }
+
+	gatewayProdLanMacAddress	OBJECT-TYPE
+		SYNTAX			MacAddress  ( SIZE ( 6  ) )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"LAN Mac Address."
+		::=  {  gatewayProdManufacturingSetup  3  }
+
+	gatewayProdWanMacAddress	OBJECT-TYPE
+		SYNTAX			MacAddress  ( SIZE ( 6  ) )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"WAN Mac Address."
+		::=  {  gatewayProdManufacturingSetup  4  }
+
+	gatewayProdSystemReboot	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Reboot system."
+		::=  {  gatewayProdManufacturingSetup  5  }
+
+	gatewayProdSaveSettings	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Save the settings to flash."
+		::=  {  gatewayProdManufacturingSetup  6  }
+
+	gatewayProdSaveSettingsToFactory OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Set true to save the settings to factory.Always return false."
+		::=  {  gatewayProdManufacturingSetup  7  }
+
+	gatewayProdRestoreFactorySettings OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Set true to retore the settings from factory and system will reboot.Always return false."
+		::=  {  gatewayProdManufacturingSetup  9  }
+
+	--gatewayProdRestoreDefaultSettings	OBJECT-TYPE
+	--	SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+	--	MAX-ACCESS		read-write
+	--	STATUS			current
+	--	DESCRIPTION		"Restore the settings to default."
+	--	::=  {  gatewayProdManufacturingSetup  9  }
+
+	gatewayProdWebLanguage	OBJECT-TYPE
+		SYNTAX			INTEGER  { default ( 0 ) , chinese ( 1 ) , english ( 2 ) , spanish ( 3 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The web page language."
+		::=  {  gatewayProdManufacturingSetup  10  }
+
+	--gatewayProdSystemTimeZone	OBJECT-TYPE
+	--	SYNTAX			INTEGER  { gmtMinus12001Text ( 0 ) , gmtMinus11001Text ( 1 ) , gmtMinus10001Text ( 2 ) , gmtMinus9001Text ( 3 ) , gmtMinus8001Text ( 4 ) , gmtMinus7001Text ( 5 ) , gmtMinus6001Text ( 6 ) , gmtMinus5001Text ( 7 ) , gmtMinus4001Text ( 8 ) , gmtMinus3301Text ( 9 ) , gmtMinus3001Text ( 10 ) , gmtMinus2001Text ( 11 ) , gmtMinus1001Text ( 12 ) , gmt0001Text ( 13 ) , gmtPlus1001Text ( 14 ) , gmtPlus2001Text ( 15 ) , gmtPlus3001Text ( 16 ) , gmtPlus3301Text ( 17 ) , gmtPlus4001Text ( 18 ) , gmtPlus4301Text ( 19 ) , gmtPlus5001Text ( 20 ) , gmtPlus5301Text ( 21 ) , gmtPlus5451Text ( 22 ) , gmtPlus6001Text ( 23 ) , gmtPlus6301Text ( 24 ) , gmtPlus7001Text ( 25 ) , gmtPlus8001Text ( 26 ) , gmtPlus9001Text ( 27 ) , gmtPlus9301Text ( 28 ) , gmtPlus10001Text ( 29 ) , gmtPlus11001Text ( 30 ) , gmtPlus12001Text ( 31 ) , gmtPlus13001Text ( 32 ) }
+	--	MAX-ACCESS		read-write
+	--	STATUS			current
+	--	DESCRIPTION		"The system time zone. default value is gmtPlus8001Text(25)."
+	--	::=  {  gatewayProdManufacturingSetup  11  }
+
+	gatewayProdGatewayReinit	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Make gateway reinit when set true. Always return false when get"
+		::=  {  gatewayProdManufacturingSetup  12  }
+
+	gatewayProdTelnetRuntimeEnable	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Start the telnetd server when set true. Always return false when get."
+		::=  {  gatewayProdManufacturingSetup  13  }
+	
+	gatewayProdCalibrationState	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"Return the wireless calibration result."
+		::=  {  gatewayProdManufacturingSetup  14  }       
+
+	gatewayProdWlanReload	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Wlan configuration apply and wlan reload. Always return false when get."
+		::=  {  gatewayProdManufacturingSetup  15  } 
+		
+	gatewayProdBrand	OBJECT-TYPE
+		SYNTAX			DisplayString  ( SIZE ( 0 .. 255  ) )
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"The Product brand."
+		::=  {  gatewayProdInformationSetup  1  }
+
+	gatewayProdModel	OBJECT-TYPE
+		SYNTAX			DisplayString  ( SIZE ( 0 .. 255  ) )
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"The Product Model."
+		::=  {  gatewayProdInformationSetup  2  }
+
+	gatewayProdSerial	OBJECT-TYPE
+		SYNTAX			DisplayString  ( SIZE ( 0 .. 255  ) )
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"The Product Serial Number."
+		::=  {  gatewayProdInformationSetup  3  }
+
+	gatewayProdEquipmentDescription	OBJECT-TYPE
+		SYNTAX			DisplayString  ( SIZE ( 0 .. 255  ) )
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"The Product Equipment Description ."
+		::=  {  gatewayProdInformationSetup  4  }
+
+	gatewayProdFirmwareVersion	OBJECT-TYPE
+		SYNTAX			DisplayString  ( SIZE ( 0 .. 255  ) )
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"The Product Firmware Version."
+		::=  {  gatewayProdInformationSetup  5  }
+
+	gatewayProdHardwareVersion	OBJECT-TYPE
+		SYNTAX			DisplayString  ( SIZE ( 0 .. 255  ) )
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"The Product Hardware Version."
+		::=  {  gatewayProdInformationSetup  6  }
+
+	gatewayProdBootVersion	OBJECT-TYPE
+		SYNTAX			DisplayString  ( SIZE ( 0 .. 255  ) )
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"The Product Boot Version."
+		::=  {  gatewayProdInformationSetup  7  }
+
+	gatewayProdDefaultUser	OBJECT-TYPE
+		SYNTAX			DisplayString  ( SIZE ( 1 .. 31  ) )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The default user name to access Web GUI."
+		::=  {  gatewayProdManagementSetup  1  }
+
+	gatewayProdDefaultPassword	OBJECT-TYPE
+		SYNTAX			DisplayString  ( SIZE ( 1 .. 31  ) )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The default password to access Web GUI."
+		::=  {  gatewayProdManagementSetup  2  }
+
+	gatewayProdEnableWps	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Set the firewall on or off. Setting to true(1) turns on WPS. Setting to false(2) turns off WPS."
+		::=  {  gatewayProdManagementSetup  3  }
+
+	gatewayProdEnableMulticast	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or Disable the multicast function."
+		::=  {  gatewayProdManagementSetup  4  }
+
+	gatewayProdAccessUserTable	OBJECT-TYPE
+		SYNTAX		SEQUENCE  OF  GatewayProdAccessUserEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"This table controls user to access to daemons by network management stations."
+		::=  { gatewayProdManagementSetup  11 }
+
+	gatewayProdAccessUserEntry	OBJECT-TYPE
+		SYNTAX		GatewayProdAccessUserEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"An entry describing user to access to daemons by a particular network management station."
+		INDEX		{  gatewayProdAccessUserIndex  }
+		::=  { gatewayProdAccessUserTable 1 }
+
+	GatewayProdAccessUserEntry  ::=  SEQUENCE {
+		gatewayProdAccessUserIndex  INTEGER,
+		gatewayProdAccessUserUserName  DisplayString,
+		gatewayProdAccessUserPassword  DisplayString
+		}
+
+
+	gatewayProdAccessUserIndex	OBJECT-TYPE
+		SYNTAX			INTEGER  { webFromLan ( 1 ) , webFromRF ( 2 ) }
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"Index used to order the user entries. The index value list is 1,2.
+The index=1 is setting the username and password from LAN.
+The index=2 is setting the username and password from RF."
+		::=  {  gatewayProdAccessUserEntry  1  }
+
+
+	gatewayProdAccessUserUserName	OBJECT-TYPE
+		SYNTAX			DisplayString  ( SIZE ( 1 .. 32  ) )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The access user name."
+		::=  {  gatewayProdAccessUserEntry  2  }
+
+
+	gatewayProdAccessUserPassword	OBJECT-TYPE
+		SYNTAX			DisplayString  ( SIZE ( 1 .. 32  ) )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The access password."
+		::=  {  gatewayProdAccessUserEntry  3  }
+
+	gatewayProdWanSetup	OBJECT IDENTIFIER
+		::=  {  gatewayProdNetworkSetup  1  }
+
+	gatewayProdLanSetup	OBJECT IDENTIFIER
+		::=  {  gatewayProdNetworkSetup  2  }
+
+	gatewayProdRoutedSubnetSetup	OBJECT IDENTIFIER
+		::=  {  gatewayProdNetworkSetup  3  }
+		
+	gatewayProdDsLiteSetup	OBJECT IDENTIFIER
+		::=  {  gatewayProdNetworkSetup  4  }
+
+	gatewayProdWireless2GRFEnable	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or disable the wireless 2.4G RF."
+		::=  {  gatewayProdWireless2GSetup  1  }
+
+	gatewayProdWireless2GPower	OBJECT-TYPE
+		SYNTAX			INTEGER  { percent100 ( 0 ) , percent75 ( 1 ) , percent50 ( 2 ) , percent25 ( 3 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Wireless Power."
+		::=  {  gatewayProdWireless2GSetup  2  }
+
+	gatewayProdWireless2GCountry	OBJECT-TYPE
+		SYNTAX			INTEGER  { china ( 0 ) , america ( 1 ) , japan ( 2 ) , europe ( 3 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Wireless Country Code."
+		::=  {  gatewayProdWireless2GSetup  3  }
+
+	gatewayProdWireless2GChannel	OBJECT-TYPE
+		SYNTAX			INTEGER  { autoSelect ( 0 ) , channel1-2412MHz ( 1 ) , channel2-2417MHz ( 2 ) , channel3-2422MHz ( 3 ) , channel4-2427MHz ( 4 ) , channel5-2432MHz ( 5 ) , channel6-2437MHz ( 6 ) , channel7-2442MHz ( 7 ) , channel8-2447MHz ( 8 ) , channel9-2452MHz ( 9 ) , channel10-2457MHz ( 10 ) , channel11-2462MHz ( 11 ) , channel12-2467MHz ( 12 ) , channel13-2472MHz ( 13 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Wireless Channel. The channel must correspond to the country code.
+						China:  0,1-13
+						America:  0,1-11
+						Canada: 0,1-11
+						Europe (ex Spain/France): 0, 1-13
+						Spain: 0,10-11
+						France: 0,10-13
+						Japan:  0,1-13
+						Australia: 0,1-13
+						Venezuela:  0,1-13
+						Israel: 0,3-9"
+		::=  {  gatewayProdWireless2GSetup  4  }
+
+	gatewayProdWireless2GMode	OBJECT-TYPE
+		SYNTAX			INTEGER  { wj-mode-bgn ( 1 ) , wj-mode-n ( 2 ) , wj-mode-b ( 3 ) , wj-mode-g ( 4 ) , wj-mode-bg ( 5 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Wireless Mode. Default Value is 1."
+		::=  {  gatewayProdWireless2GSetup  5  }
+
+	gatewayProdWireless2GBandWidth	OBJECT-TYPE
+		SYNTAX			INTEGER  { wl-band-auto ( 0 ) , wl-band20 ( 1 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Wireless Band Width. Default Value is wl-band-auto."
+		::=  {  gatewayProdWireless2GSetup  6  }
+
+	gatewayProdWireless2GRTSThreshold	OBJECT-TYPE
+		SYNTAX			Integer32  ( 0 .. 2347  )
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"Wireless RTS Threshold Value. The range is 0-2347,dafault value is 1460."
+		::=  {  gatewayProdWireless2GSetup  7  }
+
+	gatewayProdWireless2GBeaconInterval	OBJECT-TYPE
+		SYNTAX			Integer32  ( 20 .. 1024  )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The Wireless Beacon Interval. The range is 20-1024,default value is 100."
+		::=  {  gatewayProdWireless2GSetup  8  }
+
+	gatewayProdWireless2GMacFilterType	OBJECT-TYPE
+		SYNTAX			INTEGER  { disabled ( 0 ) , deny-listed ( 1 ) , allow-listed ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Wireless Access Control Mode."
+		::=  {  gatewayProdWireless2GSetup  9  }
+
+	gatewayProdWireless2GShortGI	OBJECT-TYPE
+		SYNTAX			TruthValue
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The Wireless ShortGI."
+		::=  {  gatewayProdWireless2GSetup  10  }
+
+	gatewayProdWireless2GSaveSettingsAndApply	OBJECT-TYPE
+		SYNTAX			TruthValue { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Set true to save Wireless2G settings and take effect.always return false."
+		::=  {  gatewayProdWireless2GSetup  11  }
+
+	gatewayProdWireless2GSsidTable	OBJECT-TYPE
+		SYNTAX		SEQUENCE  OF  GatewayProdWireless2GSsidEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"The 2G wireless ssid table."
+		::=  { gatewayProdWireless2GSetup  20 }
+
+	gatewayProdWireless2GSsidEntry	OBJECT-TYPE
+		SYNTAX		GatewayProdWireless2GSsidEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"The 2G wireless ssid table."
+		INDEX		{  gatewayProdWireless2GSsidIndex  }
+		::=  { gatewayProdWireless2GSsidTable 1 }
+
+	GatewayProdWireless2GSsidEntry  ::=  SEQUENCE {
+		gatewayProdWireless2GSsidIndex  Integer32,
+		gatewayProdWireless2GSsidMac  MacAddress,
+		gatewayProdWireless2GSsid  DisplayString,
+		gatewayProdWireless2GSsidEnable  TruthValue,
+		gatewayProdWireless2GSsidHidden  TruthValue,
+		gatewayProdWireless2GSsidIsolation  TruthValue,
+		gatewayProdWireless2GSsidMaxStation  Integer32,
+		gatewayProdWireless2GSsidSecurityType  INTEGER,
+		gatewayProdWireless2GSsidEncryptionType  INTEGER,
+		gatewayProdWireless2GSsidWpaWpa2PSKPassword  DisplayString,
+		gatewayProdWireless2GSsidWepAuthType  INTEGER,
+		gatewayProdWireless2GSsidWepKeyLength  INTEGER,
+		gatewayProdWireless2GSsidWepKeyFormat  INTEGER,
+		gatewayProdWireless2GSsidWepKeySelect  INTEGER,
+		gatewayProdWireless2GSsidWepKey  DisplayString,
+		-- hsl add for Radius server configuration,2021-11-20
+		gatewayProdWireless2GSsidSVlanId Integer32,
+		gatewayProdWireless2GSsidRadiusServerAddr IpAddress,
+		gatewayProdWireless2GSsidRadiusServerPort Integer32,
+		gatewayProdWireless2GSsidRadiusShareSecret DisplayString,
+		gatewayProdWireless2GSsidConnectionType INTEGER
+		-- add end
+		}
+
+
+	gatewayProdWireless2GSsidIndex	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 4  )
+		MAX-ACCESS		not-accessible
+		STATUS			current
+		DESCRIPTION		"SSID Index(1-4)."
+		::=  {  gatewayProdWireless2GSsidEntry  1  }
+
+
+	gatewayProdWireless2GSsidMac	OBJECT-TYPE
+		SYNTAX			MacAddress
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"BSSID"
+		::=  {  gatewayProdWireless2GSsidEntry  2  }
+
+
+	gatewayProdWireless2GSsid	OBJECT-TYPE
+		SYNTAX			DisplayString  ( SIZE ( 0 .. 255  ) )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"SSID name."
+		::=  {  gatewayProdWireless2GSsidEntry  3  }
+
+
+	gatewayProdWireless2GSsidEnable	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or disable the ssid."
+		::=  {  gatewayProdWireless2GSsidEntry  4  }
+
+
+	gatewayProdWireless2GSsidHidden	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"SSID Hidden."
+		::=  {  gatewayProdWireless2GSsidEntry  5  }
+
+
+	gatewayProdWireless2GSsidIsolation	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"SSID Isolation"
+		::=  {  gatewayProdWireless2GSsidEntry  6  }
+
+
+	gatewayProdWireless2GSsidMaxStation	OBJECT-TYPE
+		SYNTAX			Integer32  ( 0 .. 128  )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"SSID max station number."
+		::=  {  gatewayProdWireless2GSsidEntry  7  }
+
+
+	gatewayProdWireless2GSsidSecurityType	OBJECT-TYPE
+		SYNTAX			INTEGER  { disable ( 0 ) , wpapsk ( 1 ) , wpa2psk ( 2 ) , wpawpa2psk ( 3 ) , wep ( 4 ) , wpa2Enterprise (5) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"SSID Security Type."
+		::=  {  gatewayProdWireless2GSsidEntry  8  }
+
+
+	gatewayProdWireless2GSsidEncryptionType	OBJECT-TYPE
+		SYNTAX			INTEGER  { tkip ( 0 ) , aes ( 1 ) , tkipPlusaes ( 2 ) }
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"SSID Encryption Type."
+		::=  {  gatewayProdWireless2GSsidEntry  9  }
+
+
+	gatewayProdWireless2GSsidWpaWpa2PSKPassword	OBJECT-TYPE
+		SYNTAX			DisplayString  ( SIZE ( 8 .. 32  ) )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"When the encryption type is wpapsk,wpa2psk or wpawpa2psk. user can set the ssid passpord by this scalar."
+		::=  {  gatewayProdWireless2GSsidEntry  10  }
+
+
+	gatewayProdWireless2GSsidWepAuthType	OBJECT-TYPE
+		SYNTAX			INTEGER  { open-system ( 0 ) , share-key ( 1 ) , auto ( 2 ) }
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"The ssid wep authentication type."
+		::=  {  gatewayProdWireless2GSsidEntry  11  }
+
+
+	gatewayProdWireless2GSsidWepKeyLength	OBJECT-TYPE
+		SYNTAX			INTEGER  { bit64 ( 1 ) , bit128 ( 2 ) }
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"The ssid wep key length."
+		::=  {  gatewayProdWireless2GSsidEntry  12  }
+
+
+	gatewayProdWireless2GSsidWepKeyFormat	OBJECT-TYPE
+		SYNTAX			INTEGER  { ascii ( 0 ) , hex ( 1 ) }
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"The ssid wep key format.
+when the key length=64bit and key format is ascii, the wep key must be 5 characters. or the the key format is hex, the wep key must be 10 characters;
+when the key length=128bit and key format is ascii, the wep key must be 13 characters. or the the key format is hex, the wep key must be 26 characters;"
+		::=  {  gatewayProdWireless2GSsidEntry  13  }
+
+
+	gatewayProdWireless2GSsidWepKeySelect	OBJECT-TYPE
+		SYNTAX			INTEGER  { select-key ( 0 ) }
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"Select the wep key."
+		::=  {  gatewayProdWireless2GSsidEntry  14  }
+
+
+	gatewayProdWireless2GSsidWepKey	OBJECT-TYPE
+		SYNTAX			DisplayString  ( SIZE ( 5 .. 26  ) )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The ssid wep key.
+when the key length=64bit and key format is ascii, the wep key must be 5 characters. or the the key format is hex, the wep key must be 10 characters;
+when the key length=128bit and key format is ascii, the wep key must be 13 characters. or the the key format is hex, the wep key must be 26 characters;"
+		::=  {  gatewayProdWireless2GSsidEntry  15  }
+
+	-- hsl add for Radius configuration,2021-11-20
+	gatewayProdWireless2GSsidSVlanId	OBJECT-TYPE
+		SYNTAX			Integer32  ( 0 .. 4096 )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The ssid SVLAN ID for QinQ"
+		::=  {  gatewayProdWireless2GSsidEntry  16  }
+
+	gatewayProdWireless2GSsidRadiusServerAddr	OBJECT-TYPE
+		SYNTAX			IpAddress
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The radius server addr for radius authentication"
+		::=  {  gatewayProdWireless2GSsidEntry  17  }
+
+	gatewayProdWireless2GSsidRadiusServerPort	OBJECT-TYPE
+		SYNTAX			Integer32  ( 0 .. 65535 )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The radius server port for radius authentication"
+		::=  {  gatewayProdWireless2GSsidEntry  18  }
+
+	gatewayProdWireless2GSsidRadiusShareSecret	OBJECT-TYPE
+		SYNTAX			DisplayString  ( SIZE ( 0 .. 32  ) )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The radius server shared secret for radius authentication"
+		::=  {  gatewayProdWireless2GSsidEntry  19  }
+
+	gatewayProdWireless2GSsidConnectionType	OBJECT-TYPE
+		SYNTAX			INTEGER  { routed ( 0 ) , greIPv4 ( 1 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"routed(0) connect to ROUTED RND, greIPv4(1) connect to GRE IPv4 tunnel RND.default to routed."
+		::=  {  gatewayProdWireless2GSsidEntry  20  }
+	-- add end
+
+	gatewayProdWireless2GMacFilterTable	OBJECT-TYPE
+		SYNTAX		SEQUENCE  OF  GatewayProdWireless2GMacFilterEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"The 2G wireless mac filter table."
+		::=  { gatewayProdWireless2GSetup  21 }
+
+	gatewayProdWireless2GMacFilterEntry	OBJECT-TYPE
+		SYNTAX		GatewayProdWireless2GMacFilterEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"The 2G wireless mac filter table."
+		INDEX		{  gatewayProdWireless2GMacFilterIndex  }
+		::=  { gatewayProdWireless2GMacFilterTable 1 }
+
+	GatewayProdWireless2GMacFilterEntry  ::=  SEQUENCE {
+		gatewayProdWireless2GMacFilterIndex  Integer32,
+		gatewayProdWireless2GMacFilterUserMac  MacAddress,
+		gatewayProdWireless2GMacFilterRowStatus  RowStatus
+		}
+
+
+	gatewayProdWireless2GMacFilterIndex	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 32  )
+		MAX-ACCESS		not-accessible
+		STATUS			current
+		DESCRIPTION		"Wireless mac filter table index."
+		::=  {  gatewayProdWireless2GMacFilterEntry  1  }
+
+
+	gatewayProdWireless2GMacFilterUserMac	OBJECT-TYPE
+		SYNTAX			MacAddress  ( SIZE ( 6  ) )
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"Wireless filter mac address."
+		::=  {  gatewayProdWireless2GMacFilterEntry  2  }
+
+
+	gatewayProdWireless2GMacFilterRowStatus	OBJECT-TYPE
+		SYNTAX			RowStatus  { active ( 1 ) , notInService ( 2 ) , notReady ( 3 ) , createAndGo ( 4 ) , createAndWait ( 5 ) , destroy ( 6 ) }
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"Wireless mac filter rowstatus."
+		::=  {  gatewayProdWireless2GMacFilterEntry  3  }
+
+	gatewayProdWireless2GTable	OBJECT-TYPE
+		SYNTAX		SEQUENCE  OF  GatewayProdWireless2GEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"Wireless 2G Table."
+		::=  { gatewayProdWireless2GSetup  22 }
+
+	gatewayProdWireless2GEntry	OBJECT-TYPE
+		SYNTAX		GatewayProdWireless2GEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"Wireless 2G Table.Contain: index, BSSID, SSID, Password"
+		INDEX		{  gatewayProdWireless2GIndex  }
+		::=  { gatewayProdWireless2GTable 1 }
+
+	GatewayProdWireless2GEntry  ::=  SEQUENCE {
+		gatewayProdWireless2GIndex  Integer32,
+		gatewayProdWireless2GBSSID  MacAddress,
+		gatewayProdWireless2GCurrentChannel  Integer32
+		}
+
+
+	gatewayProdWireless2GIndex	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 128  )
+		MAX-ACCESS		not-accessible
+		STATUS			current
+		DESCRIPTION		"2G Index."
+		::=  {  gatewayProdWireless2GEntry  1  }
+
+
+	gatewayProdWireless2GBSSID	OBJECT-TYPE
+		SYNTAX			MacAddress  ( SIZE ( 6  ) )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"2.4G BSSID."
+		::=  {  gatewayProdWireless2GEntry  2  }
+
+	gatewayProdWireless2GCurrentChannel	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 14  )
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"2G actual running channel."
+		::=  {  gatewayProdWireless2GEntry  3  }
+
+
+	gatewayProdWireless5GRFEnable	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or disable the wireless 5G RF."
+		::=  {  gatewayProdWireless5GSetup  1  }
+
+	gatewayProdWireless5GPower	OBJECT-TYPE
+		SYNTAX			INTEGER  { percent100 ( 0 ) , percent75 ( 1 ) , percent50 ( 2 ) , percent25 ( 3 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Wireless Power."
+		::=  {  gatewayProdWireless5GSetup  2  }
+
+	gatewayProdWireless5GCountry	OBJECT-TYPE
+		SYNTAX			INTEGER  { china ( 0 ) , america ( 1 ) , japan ( 2 ) , europe ( 3 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Wireless Country Code."
+		::=  {  gatewayProdWireless5GSetup  3  }
+
+	gatewayProdWireless5GChannel	OBJECT-TYPE
+		SYNTAX			INTEGER  { autoSelect ( 0 ) , channel-36-5180MHz ( 36 ) , channel-40-5200MHz ( 40 ) , channel-44-5220MHz ( 44 ) , channel-48-5240MHz ( 48 ) , channel-52-5260MHz ( 52 ) , channel-56-5280MHz ( 56 ) , channel-60-5300MHz ( 60 ) , channel-64-5320MHz ( 64 ) , channel-100-5500MHz ( 100 ) ,  channel-104-5520MHz ( 104 ) , channel-108-5540MHz ( 108 ) , channel-112-5560MHz ( 112 ) , channel-116-5580MHz ( 116 ) , channel-120-5600MHz ( 120 ) ,  channel-124-5620MHz ( 124 ) , channel-128-5640MHz ( 128 ) , channel-132-5660MHz ( 132 ) , channel-136-5680MHz ( 136 ) , channel-140-5700MHz ( 140 ) ,  channel-149-5745MHz ( 149 ), channel-153-5765MHz ( 153 ), channel-157-5785MHz ( 157 ) , channel-161-5805MHz ( 161 ) , channel-165-5825MHz ( 165 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Wireless Channel. The channel must correspond to the country code.
+						China:  0,36-64,149-165
+						America:  0,36-64,100-140,149-165
+						Europe (ex Spain/France): 0,36-64,100-140
+						Japan: 0,36-64,100-140"
+		::=  {  gatewayProdWireless5GSetup  4  }
+
+	gatewayProdWireless5GMode	OBJECT-TYPE
+		SYNTAX			INTEGER  { wj-mode-a ( 1 ), wj-mode-an ( 2 ), wj-mode-n ( 3 ), wj-mode-ac ( 4 ), wj-mode-nac ( 5 ), wj-mode-anac ( 6 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Wireless Mode. Default Value is wj-mode-anac ( 6 )."
+		::=  {  gatewayProdWireless5GSetup  5  }
+
+	gatewayProdWireless5GBandWidth	OBJECT-TYPE
+		SYNTAX			INTEGER  { wl-band-auto ( 0 ) , wl-band20 ( 1 ), wl-band40 ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Wireless Band Width. Default Value is wl-band-auto."
+		::=  {  gatewayProdWireless5GSetup  6  }
+
+	gatewayProdWireless5GRTSThreshold	OBJECT-TYPE
+		SYNTAX			Integer32  ( 0 .. 2347  )
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"Wireless RTS Threshold Value. The range is 0-2347,dafault value is 1460."
+		::=  {  gatewayProdWireless5GSetup  7  }
+
+	gatewayProdWireless5GBeaconInterval	OBJECT-TYPE
+		SYNTAX			Integer32  ( 20 .. 1024  )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The Wireless Beacon Interval. The range is 20-1024,default value is 100."
+		::=  {  gatewayProdWireless5GSetup  8  }
+
+	gatewayProdWireless5GMacFilterType	OBJECT-TYPE
+		SYNTAX			INTEGER  { disabled ( 0 ) , deny-listed ( 1 ) , allow-listed ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Wireless Access Control Mode."
+		::=  {  gatewayProdWireless5GSetup  9  }
+
+	gatewayProdWireless5GShortGI	OBJECT-TYPE
+		SYNTAX			TruthValue
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The Wireless ShortGI."
+		::=  {  gatewayProdWireless5GSetup  10  }
+
+	gatewayProdWireless5GSaveSettingsAndApply	OBJECT-TYPE
+		SYNTAX			TruthValue { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Set true to save Wireless5G settings and take effect.always return false."
+		::=  {  gatewayProdWireless5GSetup  11  }
+
+	gatewayProdWireless5GSsidTable	OBJECT-TYPE
+		SYNTAX		SEQUENCE  OF  GatewayProdWireless5GSsidEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"The 5G wireless ssid table."
+		::=  { gatewayProdWireless5GSetup  20 }
+
+	gatewayProdWireless5GSsidEntry	OBJECT-TYPE
+		SYNTAX		GatewayProdWireless5GSsidEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"The 5G wireless ssid table."
+		INDEX		{  gatewayProdWireless5GSsidIndex  }
+		::=  { gatewayProdWireless5GSsidTable 1 }
+
+	GatewayProdWireless5GSsidEntry  ::=  SEQUENCE {
+		gatewayProdWireless5GSsidIndex  Integer32,
+		gatewayProdWireless5GSsidMac  MacAddress,
+		gatewayProdWireless5GSsid  DisplayString,
+		gatewayProdWireless5GSsidEnable  TruthValue,
+		gatewayProdWireless5GSsidHidden  TruthValue,
+		gatewayProdWireless5GSsidIsolation  TruthValue,
+		gatewayProdWireless5GSsidMaxStation  Integer32,
+		gatewayProdWireless5GSsidSecurityType  INTEGER,
+		gatewayProdWireless5GSsidEncryptionType  INTEGER,
+		gatewayProdWireless5GSsidWpaWpa2PSKPassword  DisplayString,
+		gatewayProdWireless5GSsidWepAuthType  INTEGER,
+		gatewayProdWireless5GSsidWepKeyLength  INTEGER,
+		gatewayProdWireless5GSsidWepKeyFormat  INTEGER,
+		gatewayProdWireless5GSsidWepKeySelect  INTEGER,
+		gatewayProdWireless5GSsidWepKey  DisplayString,
+		-- hsl add for Radius configuration,2021-11-20
+		gatewayProdWireless5GSsidSVlanId Integer32,
+		gatewayProdWireless5GSsidRadiusServerAddr IpAddress,
+		gatewayProdWireless5GSsidRadiusServerPort Integer32,
+		gatewayProdWireless5GSsidRadiusShareSecret DisplayString,
+		gatewayProdWireless5GSsidConnectionType INTEGER
+		-- add end
+		}
+
+	gatewayProdWireless5GSsidIndex	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 4  )
+		MAX-ACCESS		not-accessible
+		STATUS			current
+		DESCRIPTION		"SSID Index(1-4)."
+		::=  {  gatewayProdWireless5GSsidEntry  1  }
+
+
+	gatewayProdWireless5GSsidMac	OBJECT-TYPE
+		SYNTAX			MacAddress
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"BSSID"
+		::=  {  gatewayProdWireless5GSsidEntry  2  }
+
+	gatewayProdWireless5GSsid	OBJECT-TYPE
+		SYNTAX			DisplayString  ( SIZE ( 0 .. 255  ) )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"SSID name."
+		::=  {  gatewayProdWireless5GSsidEntry  3  }
+
+	gatewayProdWireless5GSsidEnable	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or disable the ssid."
+		::=  {  gatewayProdWireless5GSsidEntry  4  }
+
+	gatewayProdWireless5GSsidHidden	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"SSID Hidden."
+		::=  {  gatewayProdWireless5GSsidEntry  5  }
+
+	gatewayProdWireless5GSsidIsolation	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"SSID Isolation"
+		::=  {  gatewayProdWireless5GSsidEntry  6  }
+
+	gatewayProdWireless5GSsidMaxStation	OBJECT-TYPE
+		SYNTAX			Integer32  ( 0 .. 128  )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"SSID max station number."
+		::=  {  gatewayProdWireless5GSsidEntry  7  }
+
+	gatewayProdWireless5GSsidSecurityType	OBJECT-TYPE
+		SYNTAX			INTEGER  { disable ( 0 ) , wpapsk ( 1 ) , wpa2psk ( 2 ) , wpawpa2psk ( 3 ), wep ( 4 ), wpa2Enterprise (5) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"SSID Security Type."
+		::=  {  gatewayProdWireless5GSsidEntry  8  }
+
+	gatewayProdWireless5GSsidEncryptionType	OBJECT-TYPE
+		SYNTAX			INTEGER  { tkip ( 0 ) , aes ( 1 ) , tkipPlusaes ( 2 ) }
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"SSID Encryption Type."
+		::=  {  gatewayProdWireless5GSsidEntry  9  }
+
+	gatewayProdWireless5GSsidWpaWpa2PSKPassword	OBJECT-TYPE
+		SYNTAX			DisplayString  ( SIZE ( 8 .. 32  ) )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"When the encryption type is wpapsk,wpa2psk or wpawpa2psk. user can set the ssid passpord by this scalar."
+		::=  {  gatewayProdWireless5GSsidEntry  10  }
+
+	gatewayProdWireless5GSsidWepAuthType	OBJECT-TYPE
+		SYNTAX			INTEGER  { open-system ( 0 ) , share-key ( 1 ) , auto ( 2 ) }
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"The ssid wep authentication type."
+		::=  {  gatewayProdWireless5GSsidEntry  11  }
+
+	gatewayProdWireless5GSsidWepKeyLength	OBJECT-TYPE
+		SYNTAX			INTEGER  { bit64 ( 1 ) , bit128 ( 2 ) }
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"The ssid wep key length."
+		::=  {  gatewayProdWireless5GSsidEntry  12  }
+
+	gatewayProdWireless5GSsidWepKeyFormat	OBJECT-TYPE
+		SYNTAX			INTEGER  { ascii ( 0 ) , hex ( 1 ) }
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"The ssid wep key format.
+when the key length=64bit and key format is ascii, the wep key must be 5 characters. or the the key format is hex, the wep key must be 10 characters;
+when the key length=128bit and key format is ascii, the wep key must be 13 characters. or the the key format is hex, the wep key must be 26 characters;"
+		::=  {  gatewayProdWireless5GSsidEntry  13  }
+
+	gatewayProdWireless5GSsidWepKeySelect	OBJECT-TYPE
+		SYNTAX			INTEGER  { select-key ( 0 ) }
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"Select the wep key."
+		::=  {  gatewayProdWireless5GSsidEntry  14  }
+
+	gatewayProdWireless5GSsidWepKey	OBJECT-TYPE
+		SYNTAX			DisplayString  ( SIZE ( 5 .. 26  ) )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The ssid wep key.
+when the key length=64bit and key format is ascii, the wep key must be 5 characters. or the the key format is hex, the wep key must be 10 characters;
+when the key length=128bit and key format is ascii, the wep key must be 13 characters. or the the key format is hex, the wep key must be 26 characters;"
+		::=  {  gatewayProdWireless5GSsidEntry  15  }
+
+	-- hsl add for Radius configuration,2021-11-20
+	gatewayProdWireless5GSsidSVlanId	OBJECT-TYPE
+		SYNTAX			Integer32  ( 0 .. 4096 )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The ssid SVLAN ID for QinQ"
+		::=  {  gatewayProdWireless5GSsidEntry  16  }
+
+	gatewayProdWireless5GSsidRadiusServerAddr	OBJECT-TYPE
+		SYNTAX			IpAddress
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The radius server addr for radius authentication"
+		::=  {  gatewayProdWireless5GSsidEntry  17  }
+
+	gatewayProdWireless5GSsidRadiusServerPort	OBJECT-TYPE
+		SYNTAX			Integer32  ( 0 .. 65535 )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The radius server port for radius authentication"
+		::=  {  gatewayProdWireless5GSsidEntry  18  }
+
+	gatewayProdWireless5GSsidRadiusShareSecret	OBJECT-TYPE
+		SYNTAX			DisplayString  ( SIZE ( 0 .. 32  ) )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The radius server shared secret for radius authentication"
+		::=  {  gatewayProdWireless5GSsidEntry  19  }
+
+	gatewayProdWireless5GSsidConnectionType	OBJECT-TYPE
+		SYNTAX			INTEGER  { routed ( 0 ) , greIPv4 ( 1 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"routed(0) connect to ROUTED RND, greIPv4(1) connect to GRE IPv4 tunnel RND.default to routed."
+		::=  {  gatewayProdWireless5GSsidEntry  20  }
+	-- add end
+
+	gatewayProdWireless5GMacFilterTable	OBJECT-TYPE
+		SYNTAX		SEQUENCE  OF  GatewayProdWireless5GMacFilterEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"The 5G wireless mac filter table."
+		::=  { gatewayProdWireless5GSetup  21 }
+
+	gatewayProdWireless5GMacFilterEntry	OBJECT-TYPE
+		SYNTAX		GatewayProdWireless5GMacFilterEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"The 5G wireless mac filter table."
+		INDEX		{  gatewayProdWireless5GMacFilterIndex  }
+		::=  { gatewayProdWireless5GMacFilterTable 1 }
+
+	GatewayProdWireless5GMacFilterEntry  ::=  SEQUENCE {
+		gatewayProdWireless5GMacFilterIndex  Integer32,
+		gatewayProdWireless5GMacFilterUserMac  MacAddress,
+		gatewayProdWireless5GMacFilterRowStatus  RowStatus
+		}
+
+	gatewayProdWireless5GMacFilterIndex	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 32  )
+		MAX-ACCESS		not-accessible
+		STATUS			current
+		DESCRIPTION		"Wireless mac filter table index."
+		::=  {  gatewayProdWireless5GMacFilterEntry  1  }
+
+	gatewayProdWireless5GMacFilterUserMac	OBJECT-TYPE
+		SYNTAX			MacAddress  ( SIZE ( 6  ) )
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"Wireless filter mac address."
+		::=  {  gatewayProdWireless5GMacFilterEntry  2  }
+
+	gatewayProdWireless5GMacFilterRowStatus	OBJECT-TYPE
+		SYNTAX			RowStatus  { active ( 1 ) , notInService ( 2 ) , notReady ( 3 ) , createAndGo ( 4 ) , createAndWait ( 5 ) , destroy ( 6 ) }
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"Wireless mac filter rowstatus."
+		::=  {  gatewayProdWireless5GMacFilterEntry  3  }
+
+	gatewayProdWireless5GTable	OBJECT-TYPE
+		SYNTAX		SEQUENCE  OF  GatewayProdWireless5GEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"Wireless 5G Table."
+		::=  { gatewayProdWireless5GSetup  22 }
+
+	gatewayProdWireless5GEntry	OBJECT-TYPE
+		SYNTAX		GatewayProdWireless5GEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"Wireless 5G Table.Contain: index, BSSID, SSID, Password"
+		INDEX		{  gatewayProdWireless5GIndex  }
+		::=  { gatewayProdWireless5GTable 1 }
+
+	GatewayProdWireless5GEntry  ::=  SEQUENCE {
+		gatewayProdWireless5GIndex  Integer32,
+		gatewayProdWireless5GBSSID  MacAddress,
+		gatewayProdWireless5GCurrentChannel  Integer32
+		}
+
+
+	gatewayProdWireless5GIndex	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 128  )
+		MAX-ACCESS		not-accessible
+		STATUS			current
+		DESCRIPTION		"5G Index."
+		::=  {  gatewayProdWireless5GEntry  1  }
+
+
+	gatewayProdWireless5GBSSID	OBJECT-TYPE
+		SYNTAX			MacAddress  ( SIZE ( 6  ) )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"5G BSSID."
+		::=  {  gatewayProdWireless5GEntry  2  }
+
+	gatewayProdWireless5GCurrentChannel	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 200  )
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"5G actual running channel."
+		::=  {  gatewayProdWireless5GEntry  3  }
+
+	gatewayProdFirewallEnable	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or Disable Firewall."
+		::=  {  gatewayProdFirewallSetup  1  }
+
+	gatewayProdWanBlocking	OBJECT-TYPE
+		SYNTAX			TruthValue { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"WAN Blocking."
+		::=  {  gatewayProdFirewallSetup  2  }
+
+	gatewayProdDmzHostIP	OBJECT-TYPE
+		SYNTAX			IpAddress
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"DMZ ip address."
+		::=  {  gatewayProdFirewallSetup  3  }
+
+	gatewayProdPptpPassthrough	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"PPTP Passthrough."
+		::=  {  gatewayProdFirewallSetup  4  }
+
+	gatewayProdIpsecPassthrough	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The VPN Passthrough of IPSec."
+		::=  {  gatewayProdFirewallSetup  5  }
+
+	gatewayProdL2tpPassthrough	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The VPN Passthough of L2TP."
+		::=  {  gatewayProdFirewallSetup  6  }
+
+	gatewayProdMacPassthroughEnable	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or disable MAC passthrough."
+		::=  {  gatewayProdFirewallSetup  7  }
+
+	gatewayProdUrlFilterMode	OBJECT-TYPE
+		SYNTAX			INTEGER  { disable (0) , blacklist ( 1 ) , whitelist ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The url filter mode. black-list or white-list."
+		::=  {  gatewayProdFirewallSetup  8  }
+
+	gatewayProdDnsRelay	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or disable DNS relay function."
+		::=  {  gatewayProdFirewallSetup  9  }
+
+	gatewayProdDmzEnable	OBJECT-TYPE
+		SYNTAX			TruthValue { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or disable the DMZ."
+		::=  {  gatewayProdFirewallSetup  10  }
+
+	gatewayProdUpnpEnable	OBJECT-TYPE
+		SYNTAX			TruthValue { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or disable the upnp."
+		::=  {  gatewayProdFirewallSetup  11  }
+
+	gatewayProdWebGUIEnable	OBJECT-TYPE
+		SYNTAX			INTEGER  { all-Access-Disabled ( 0 ) , lan-Enabled-wan-Disabled ( 1 ) , lan-Disabled-wan-Enabled ( 2 ) , all-Access-Enabled ( 3 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or disable the Web GUI."
+		::=  {  gatewayProdFirewallSetup  12  }
+
+	gatewayProdPortFilterEnable	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or disable the Port Filter Funtion."
+		::=  {  gatewayProdFirewallSetup  13  }
+
+	gatewayProdIpFilterEnable	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or disable the IP Filter Function."
+		::=  {  gatewayProdFirewallSetup  14  }
+
+	gatewayProdMacFilterEnable	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or disable the MAC Filter function."
+		::=  {  gatewayProdFirewallSetup  15  }
+
+	gatewayProdUrlFilterEnable	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or disable the Url Filter function."
+		::=  {  gatewayProdFirewallSetup  16  }
+
+	gatewayProdPortForwardEnable	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or disable the Port Forward function."
+		::=  {  gatewayProdFirewallSetup  17  }
+
+	gatewayProdPortTriggerEnable	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or disable the Port Trigger function."
+		::=  {  gatewayProdFirewallSetup  18  }
+	gatewayProdFirewallReinit	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Make firewall effective again when set true. Always return false when get."
+		::=  {  gatewayProdFirewallSetup  19  }
+
+    gatewayProdMacPassthroughApply	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Make Mac Passthrough effective again when set true. Always return false when get."
+		::=  {  gatewayProdFirewallSetup  20  }
+
+	gatewayProdSTBPassthroughEnable	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Make STB Passthrough effective again when set true. Always return false when get."
+		::=  {  gatewayProdFirewallSetup  21  }
+
+	gatewayProdFirewallMacPassthroughTable	OBJECT-TYPE
+		SYNTAX		SEQUENCE  OF  GatewayProdFirewallMacPassthroughEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"Description"
+		::=  { gatewayProdFirewallSetup  31 }
+
+	gatewayProdFirewallMacPassthroughEntry	OBJECT-TYPE
+		SYNTAX		GatewayProdFirewallMacPassthroughEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"Row Description"
+		INDEX		{  gatewayProdFirewallMacPassthroughIndex  }
+		::=  { gatewayProdFirewallMacPassthroughTable 1 }
+
+	GatewayProdFirewallMacPassthroughEntry  ::=  SEQUENCE {
+		gatewayProdFirewallMacPassthroughIndex  Integer32,
+		gatewayProdFirewallMacPassthroughMac  MacAddress,
+		gatewayProdFirewallMacPassthroughRowstatus  RowStatus
+		}
+
+
+	gatewayProdFirewallMacPassthroughIndex	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 128  )
+		MAX-ACCESS		not-accessible
+		STATUS			current
+		DESCRIPTION		"The IP Passthrough Table Index."
+		::=  {  gatewayProdFirewallMacPassthroughEntry  1  }
+
+
+	gatewayProdFirewallMacPassthroughMac	OBJECT-TYPE
+		SYNTAX			MacAddress
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"The IP Passthrough Mac Address."
+		::=  {  gatewayProdFirewallMacPassthroughEntry  2  }
+
+
+	gatewayProdFirewallMacPassthroughRowstatus	OBJECT-TYPE
+		SYNTAX			RowStatus
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"Column Description"
+		::=  {  gatewayProdFirewallMacPassthroughEntry  3  }
+
+	gatewayProdFirewallPortFilterTable	OBJECT-TYPE
+		SYNTAX		SEQUENCE  OF  GatewayProdFirewallPortFilterEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"The firewall port filter table."
+		::=  { gatewayProdFirewallSetup  32 }
+
+	gatewayProdFirewallPortFilterEntry	OBJECT-TYPE
+		SYNTAX		GatewayProdFirewallPortFilterEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"The firewall port filter table."
+		INDEX		{  gatewayProdFirewallPortFilterIndex  }
+		::=  { gatewayProdFirewallPortFilterTable 1 }
+
+	GatewayProdFirewallPortFilterEntry  ::=  SEQUENCE {
+		gatewayProdFirewallPortFilterIndex  Integer32,
+		gatewayProdFirewallPortFilterStartPort  Integer32,
+		gatewayProdFirewallPortFilterEndPort  Integer32,
+		gatewayProdFirewallPortFilterProtocal  INTEGER,
+		gatewayProdFirewallPortFilterRowstatus  RowStatus
+		}
+
+
+	gatewayProdFirewallPortFilterIndex	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 128  )
+		MAX-ACCESS		not-accessible
+		STATUS			current
+		DESCRIPTION		"Port filter table index."
+		::=  {  gatewayProdFirewallPortFilterEntry  1  }
+
+
+	gatewayProdFirewallPortFilterStartPort	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 65535  )
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"Port filter start port number."
+		::=  {  gatewayProdFirewallPortFilterEntry  2  }
+
+
+	gatewayProdFirewallPortFilterEndPort	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 65535  )
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"Port filter end port."
+		::=  {  gatewayProdFirewallPortFilterEntry  3  }
+
+
+	gatewayProdFirewallPortFilterProtocal	OBJECT-TYPE
+		SYNTAX			INTEGER  { both ( 0 ) , tcp ( 1 ) , udp ( 2 ) }
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"The firewall port filter protocal."
+		::=  {  gatewayProdFirewallPortFilterEntry  4  }
+
+
+	gatewayProdFirewallPortFilterRowstatus	OBJECT-TYPE
+		SYNTAX			RowStatus
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"Rowstatus"
+		::=  {  gatewayProdFirewallPortFilterEntry  5  }
+
+	gatewayProdFirewallIpFilterTable	OBJECT-TYPE
+		SYNTAX		SEQUENCE  OF  GatewayProdFirewallIpFilterEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"The firewall ip filter table."
+		::=  { gatewayProdFirewallSetup  33 }
+
+	gatewayProdFirewallIpFilterEntry	OBJECT-TYPE
+		SYNTAX		GatewayProdFirewallIpFilterEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"The firewall ip filter table."
+		INDEX		{  gatewayProdFirewallIpFilterIndex  }
+		::=  { gatewayProdFirewallIpFilterTable 1 }
+
+	GatewayProdFirewallIpFilterEntry  ::=  SEQUENCE {
+		gatewayProdFirewallIpFilterIndex  Integer32,
+		gatewayProdFirewallIpFilterIpAddress  IpAddress,
+		gatewayProdFirewallIpFilterProtocal  INTEGER,
+		gatewayProdFirewallIpFilterRowstatus  RowStatus
+		}
+
+
+	gatewayProdFirewallIpFilterIndex	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 128  )
+		MAX-ACCESS		not-accessible
+		STATUS			current
+		DESCRIPTION		"IP filter index."
+		::=  {  gatewayProdFirewallIpFilterEntry  1  }
+
+
+	gatewayProdFirewallIpFilterIpAddress	OBJECT-TYPE
+		SYNTAX			IpAddress
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"IP filter ip address."
+		::=  {  gatewayProdFirewallIpFilterEntry  2  }
+
+
+	gatewayProdFirewallIpFilterProtocal	OBJECT-TYPE
+		SYNTAX			INTEGER  { both ( 0 ) , tcp ( 1 ) , udp ( 2 ) }
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"IP filter protocal."
+		::=  {  gatewayProdFirewallIpFilterEntry  3  }
+
+
+	gatewayProdFirewallIpFilterRowstatus	OBJECT-TYPE
+		SYNTAX			RowStatus
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"IP filter rowstatus."
+		::=  {  gatewayProdFirewallIpFilterEntry  4  }
+
+	gatewayProdFirewallMacFilterTable	OBJECT-TYPE
+		SYNTAX		SEQUENCE  OF  GatewayProdFirewallMacFilterEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"The firewall mac filter table."
+		::=  { gatewayProdFirewallSetup  34 }
+
+	gatewayProdFirewallMacFilterEntry	OBJECT-TYPE
+		SYNTAX		GatewayProdFirewallMacFilterEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"The firewall mac filter table."
+		INDEX		{  gatewayProdFirewallMacFilterIndex  }
+		::=  { gatewayProdFirewallMacFilterTable 1 }
+
+	GatewayProdFirewallMacFilterEntry  ::=  SEQUENCE {
+		gatewayProdFirewallMacFilterIndex  Integer32,
+		gatewayProdFirewallMacFilterMac  MacAddress,
+		gatewayProdFirewallMacFilterRowstatus  RowStatus
+		}
+
+
+	gatewayProdFirewallMacFilterIndex	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 128  )
+		MAX-ACCESS		not-accessible
+		STATUS			current
+		DESCRIPTION		"MAC fliter index."
+		::=  {  gatewayProdFirewallMacFilterEntry  1  }
+
+
+	gatewayProdFirewallMacFilterMac	OBJECT-TYPE
+		SYNTAX			MacAddress
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"MAC filter mac address."
+		::=  {  gatewayProdFirewallMacFilterEntry  2  }
+
+
+	gatewayProdFirewallMacFilterRowstatus	OBJECT-TYPE
+		SYNTAX			RowStatus
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"MAC filter rowstatus."
+		::=  {  gatewayProdFirewallMacFilterEntry  3  }
+
+	gatewayProdFirewallUrlFilterTable	OBJECT-TYPE
+		SYNTAX		SEQUENCE  OF  GatewayProdFirewallUrlFilterEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"The firewall url filter table."
+		::=  { gatewayProdFirewallSetup  35 }
+
+	gatewayProdFirewallUrlFilterEntry	OBJECT-TYPE
+		SYNTAX		GatewayProdFirewallUrlFilterEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"The firewall url filter table."
+		INDEX		{  gatewayProdFirewallUrlFilterIndex  }
+		::=  { gatewayProdFirewallUrlFilterTable 1 }
+
+	GatewayProdFirewallUrlFilterEntry  ::=  SEQUENCE {
+		gatewayProdFirewallUrlFilterIndex  Integer32,
+		gatewayProdFirewallUrlFilterAddress  DisplayString,
+		gatewayProdFirewallUrlFilterRowstatus  RowStatus
+		}
+
+	gatewayProdFirewallUrlFilterIndex	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 128  )
+		MAX-ACCESS		not-accessible
+		STATUS			current
+		DESCRIPTION		"The firewall url filter table index."
+		::=  {  gatewayProdFirewallUrlFilterEntry  1  }
+
+
+	gatewayProdFirewallUrlFilterAddress	OBJECT-TYPE
+		SYNTAX			DisplayString  ( SIZE ( 0 .. 255  ) )
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"Url filter address."
+		::=  {  gatewayProdFirewallUrlFilterEntry  2  }
+
+
+	gatewayProdFirewallUrlFilterRowstatus	OBJECT-TYPE
+		SYNTAX			RowStatus  { active ( 1 ) , notInService ( 2 ) , notReady ( 3 ) , createAndGo ( 4 ) , createAndWait ( 5 ) , destroy ( 6 ) }
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"Url filter address."
+		::=  {  gatewayProdFirewallUrlFilterEntry  3  }
+
+	gatewayProdFirewallPortForwardTable	OBJECT-TYPE
+		SYNTAX		SEQUENCE  OF  GatewayProdFirewallPortForwardEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"The firewall port forward table."
+		::=  { gatewayProdFirewallSetup  36 }
+
+	gatewayProdFirewallPortForwardEntry	OBJECT-TYPE
+		SYNTAX		GatewayProdFirewallPortForwardEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"The firewall port forward table."
+		INDEX		{  gatewayProdFirewallPortForwardIndex  }
+		::=  { gatewayProdFirewallPortForwardTable 1 }
+
+	GatewayProdFirewallPortForwardEntry  ::=  SEQUENCE {
+		gatewayProdFirewallPortForwardIndex  Integer32,
+		gatewayProdFirewallPortForwardLocalIpaddr  IpAddress,
+		gatewayProdFirewallPortForwardProtocal  INTEGER,
+		gatewayProdFirewallPortForwardInternalPort  Integer32,
+		gatewayProdFirewallPortForwardExternalPort  Integer32,
+		gatewayProdFirewallPortForwardRowstatus  RowStatus
+		}
+
+
+	gatewayProdFirewallPortForwardIndex	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 128  )
+		MAX-ACCESS		not-accessible
+		STATUS			current
+		DESCRIPTION		"The port forward table index. range is 1-128."
+		::=  {  gatewayProdFirewallPortForwardEntry  1  }
+
+
+	gatewayProdFirewallPortForwardLocalIpaddr	OBJECT-TYPE
+		SYNTAX			IpAddress
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"Port forward local ip address."
+		::=  {  gatewayProdFirewallPortForwardEntry  2  }
+
+
+	gatewayProdFirewallPortForwardProtocal	OBJECT-TYPE
+		SYNTAX			INTEGER  { both ( 0 ) , tcp ( 1 ) , udp ( 2 ) }
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"Port farword protocal."
+		::=  {  gatewayProdFirewallPortForwardEntry  3  }
+
+
+	gatewayProdFirewallPortForwardInternalPort	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 65535  )
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"Port farword start port."
+		::=  {  gatewayProdFirewallPortForwardEntry  4  }
+
+
+	gatewayProdFirewallPortForwardExternalPort	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 65535  )
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"Port forward end port."
+		::=  {  gatewayProdFirewallPortForwardEntry  5  }
+
+
+	gatewayProdFirewallPortForwardRowstatus	OBJECT-TYPE
+		SYNTAX			RowStatus
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"Port forward rowstatus."
+		::=  {  gatewayProdFirewallPortForwardEntry  6  }
+
+	gatewayProdFirewallPortTriggerTable	OBJECT-TYPE
+		SYNTAX		SEQUENCE  OF  GatewayProdFirewallPortTriggerEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"The firewall port trigger table."
+		::=  { gatewayProdFirewallSetup  37 }
+
+	gatewayProdFirewallPortTriggerEntry	OBJECT-TYPE
+		SYNTAX		GatewayProdFirewallPortTriggerEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"The firewall port trigger table."
+		INDEX		{  gatewayProdFirewallPortTriggerIndex  }
+		::=  { gatewayProdFirewallPortTriggerTable 1 }
+
+	GatewayProdFirewallPortTriggerEntry  ::=  SEQUENCE {
+		gatewayProdFirewallPortTriggerIndex  Integer32,
+		gatewayProdFirewallPortTriggerStartPort  Integer32,
+		gatewayProdFirewallPortTriggerEndPort  Integer32,
+		gatewayProdFirewallPortTriggerProtocol  INTEGER,
+		gatewayProdFirewallOpenStartPort  Integer32,
+		gatewayProdFirewallOpenEndPort  Integer32,
+		gatewayProdFirewallOpenProtocal  INTEGER,
+		gatewayProdFirewallPortTriggerRowstatus  RowStatus
+		}
+
+
+	gatewayProdFirewallPortTriggerIndex	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 128  )
+		MAX-ACCESS		not-accessible
+		STATUS			current
+		DESCRIPTION		"The firewall port trigger table index."
+		::=  {  gatewayProdFirewallPortTriggerEntry  1  }
+
+
+	gatewayProdFirewallPortTriggerStartPort	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 65535  )
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"The firewall port trigger start port."
+		::=  {  gatewayProdFirewallPortTriggerEntry  2  }
+
+
+	gatewayProdFirewallPortTriggerEndPort	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 65535  )
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"The firewall port trigger end port."
+		::=  {  gatewayProdFirewallPortTriggerEntry  3  }
+
+
+	gatewayProdFirewallPortTriggerProtocol	OBJECT-TYPE
+		SYNTAX			INTEGER  { both ( 0 ) , tcp ( 1 ) , udp ( 2 ) }
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"The firewall port trigger protocol."
+		::=  {  gatewayProdFirewallPortTriggerEntry  4  }
+
+
+	gatewayProdFirewallOpenStartPort	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 65535  )
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"The firewall open start port."
+		::=  {  gatewayProdFirewallPortTriggerEntry  5  }
+
+
+	gatewayProdFirewallOpenEndPort	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 65535  )
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"The firewall open end port."
+		::=  {  gatewayProdFirewallPortTriggerEntry  6  }
+
+
+	gatewayProdFirewallOpenProtocal	OBJECT-TYPE
+		SYNTAX			INTEGER  { both ( 0 ) , tcp ( 1 ) , udp ( 2 ) }
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"The firewall open protocal."
+		::=  {  gatewayProdFirewallPortTriggerEntry  7  }
+
+
+	gatewayProdFirewallPortTriggerRowstatus	OBJECT-TYPE
+		SYNTAX			RowStatus  { active ( 1 ) , notInService ( 2 ) , notReady ( 3 ) , createAndGo ( 4 ) , createAndWait ( 5 ) , destroy ( 6 ) }
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"Port Trigger rowstatus."
+		::=  {  gatewayProdFirewallPortTriggerEntry  8  }
+
+	gatewayProdFirewallParentControlEnable	OBJECT-TYPE
+		SYNTAX			TruthValue
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or disable the parental control."
+		::=  {  gatewayProdFirewallSetup  38  }
+
+	gatewayProdFirewallParentControlTable	OBJECT-TYPE
+		SYNTAX		SEQUENCE  OF  GatewayProdFirewallParentControlEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"The firewall parental control table."
+		::=  { gatewayProdFirewallSetup  39 }
+
+	gatewayProdFirewallParentControlEntry	OBJECT-TYPE
+		SYNTAX		GatewayProdFirewallParentControlEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"The firewall parental control table."
+		INDEX		{  gatewayProdFirewallParentControlIndex  }
+		::=  { gatewayProdFirewallParentControlTable 1 }
+
+	GatewayProdFirewallParentControlEntry  ::=  SEQUENCE {
+		gatewayProdFirewallParentControlIndex  Integer32,
+		gatewayProdFirewallParentControlMacAddress  MacAddress,
+		gatewayProdFirewallParentControlSunday  TruthValue,
+		gatewayProdFirewallParentControlMonday  TruthValue,
+		gatewayProdFirewallParentControlTuesday TruthValue,
+		gatewayProdFirewallParentControlWednesday TruthValue,
+		gatewayProdFirewallParentControlThursday TruthValue,
+		gatewayProdFirewallParentControlFriday TruthValue,
+		gatewayProdFirewallParentControlSaturday TruthValue,
+		gatewayProdFirewallParentControlType INTEGER,
+		gatewayProdFirewallParentControlPeriod	DisplayString,
+		gatewayProdFirewallParentControlDescription	DisplayString,
+		gatewayProdFirewallParentControlRowstatus  RowStatus
+		}
+
+
+	gatewayProdFirewallParentControlIndex	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 32  )
+		MAX-ACCESS		not-accessible
+		STATUS			current
+		DESCRIPTION		"The firewall parental control table index."
+		::=  {  gatewayProdFirewallParentControlEntry  1  }
+
+
+	gatewayProdFirewallParentControlMacAddress	OBJECT-TYPE
+		SYNTAX			MacAddress
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"The firewall parental control rule of client MacAddress."
+		::=  {  gatewayProdFirewallParentControlEntry  2  }
+
+
+	gatewayProdFirewallParentControlSunday	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"The firewall parental control rule of Sunday."
+		::=  {  gatewayProdFirewallParentControlEntry  3  }
+
+
+	gatewayProdFirewallParentControlMonday	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"The firewall parental control rule of Monday."
+		::=  {  gatewayProdFirewallParentControlEntry  4  }
+
+
+	gatewayProdFirewallParentControlTuesday	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"The firewall parental control rule of Tuesday."
+		::=  {  gatewayProdFirewallParentControlEntry  5  }
+
+
+	gatewayProdFirewallParentControlWednesday	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"The firewall parental control rule of Wednesday."
+		::=  {  gatewayProdFirewallParentControlEntry  6  }
+
+
+	gatewayProdFirewallParentControlThursday	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"The firewall parental control rule of Thursday."
+		::=  {  gatewayProdFirewallParentControlEntry  7  }
+
+	gatewayProdFirewallParentControlFriday	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"The firewall parental control rule of Friday."
+		::=  {  gatewayProdFirewallParentControlEntry  8  }
+
+	gatewayProdFirewallParentControlSaturday	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"The firewall parental control rule of Saturday."
+		::=  {  gatewayProdFirewallParentControlEntry  9  }
+
+	gatewayProdFirewallParentControlType	OBJECT-TYPE
+		SYNTAX			INTEGER  { forbid ( 0 ) , permit ( 1 ) }
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"The firewall parental control rule type."
+		::=  {  gatewayProdFirewallParentControlEntry  10  }
+
+	gatewayProdFirewallParentControlPeriod	OBJECT-TYPE
+		SYNTAX			DisplayString  ( SIZE ( 0 .. 12  ) )
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"The firewall parental control rule period."
+		::=  {  gatewayProdFirewallParentControlEntry  11  }
+
+	gatewayProdFirewallParentControlDescription	OBJECT-TYPE
+		SYNTAX			DisplayString  ( SIZE ( 0 .. 32  ) )
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"The firewall parental control rule description."
+		::=  {  gatewayProdFirewallParentControlEntry  12  }
+
+	gatewayProdFirewallParentControlRowstatus	OBJECT-TYPE
+		SYNTAX			RowStatus  { active ( 1 ) , notInService ( 2 ) , notReady ( 3 ) , createAndGo ( 4 ) , createAndWait ( 5 ) , destroy ( 6 ) }
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"The firewall parental control rule rowstatus."
+		::=  {  gatewayProdFirewallParentControlEntry  13  }
+
+	gatewayProdLanConnectMode	OBJECT-TYPE
+		SYNTAX			INTEGER  { static ( 0 ) , dhcp ( 1 ) }
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"The LAN ip address mode. This scalar is always return the static(0), not support the dhcp mode.."
+		::=  {  gatewayProdLanSetup  1  }
+
+	gatewayProdLanDhcpEnable	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or disable the LAN dhcp server."
+		::=  {  gatewayProdLanSetup  2  }
+
+	gatewayProdLanDhcpPoolStart	OBJECT-TYPE
+		SYNTAX			IpAddress
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The LAN dhcp server start ip address."
+		::=  {  gatewayProdLanSetup  3  }
+
+	gatewayProdLanDhcpPoolEnd	OBJECT-TYPE
+		SYNTAX			IpAddress
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The LAN dhcp server end ip address."
+		::=  {  gatewayProdLanSetup  4  }
+
+	gatewayProdLanDhcpLeaseTime	OBJECT-TYPE
+		SYNTAX			TimeTicks
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The LAN dhcp server leases time, the units are minutes."
+		::=  {  gatewayProdLanSetup  5  }
+
+	gatewayProdMaxDhcpLeases	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 100  )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Set maximum number of IP delivered by DHCP."
+		::=  {  gatewayProdLanSetup  6  }
+
+	gatewayProdLanIpAddress	OBJECT-TYPE
+		SYNTAX			IpAddress
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The LAN IP Address."
+		::=  {  gatewayProdLanSetup  7  }
+
+	gatewayProdLanNetmask	OBJECT-TYPE
+		SYNTAX			IpAddress
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The LAN IP Netmask."
+		::=  {  gatewayProdLanSetup  8  }
+
+	gatewayProdLanDhcpClientListTable	OBJECT-TYPE
+		SYNTAX		SEQUENCE  OF  GatewayProdLanDhcpClientListEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"Description"
+		::=  { gatewayProdLanSetup  20 }
+
+	gatewayProdLanDhcpClientListEntry	OBJECT-TYPE
+		SYNTAX		GatewayProdLanDhcpClientListEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"Row Description"
+		INDEX		{  gatewayProdLanDhcpClientIndex  }
+		::=  { gatewayProdLanDhcpClientListTable 1 }
+
+	GatewayProdLanDhcpClientListEntry  ::=  SEQUENCE {
+		gatewayProdLanDhcpClientIndex  Integer32,
+		gatewayProdLanDhcpClientHostname  DisplayString,
+		gatewayProdLanDhcpClientMacAddress  MacAddress,
+		gatewayProdLanDhcpClientIpAddress  IpAddress,
+		gatewayProdLanDhcpClientExpireTime  Integer32
+		}
+
+
+	gatewayProdLanDhcpClientIndex	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 128  )
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"DHCP Client List Table index. which range is 1-128."
+		::=  {  gatewayProdLanDhcpClientListEntry  1  }
+
+
+	gatewayProdLanDhcpClientHostname	OBJECT-TYPE
+		SYNTAX			DisplayString  ( SIZE ( 0 .. 255  ) )
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"Column Description"
+		::=  {  gatewayProdLanDhcpClientListEntry  2  }
+
+
+	gatewayProdLanDhcpClientMacAddress	OBJECT-TYPE
+		SYNTAX			MacAddress  ( SIZE ( 6 ) )
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"DHCP Client MAC Address."
+		::=  {  gatewayProdLanDhcpClientListEntry  3  }
+
+
+	gatewayProdLanDhcpClientIpAddress	OBJECT-TYPE
+		SYNTAX			IpAddress
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"DHCP Client IP Address."
+		::=  {  gatewayProdLanDhcpClientListEntry  4  }
+
+
+	gatewayProdLanDhcpClientExpireTime	OBJECT-TYPE
+		SYNTAX			Integer32  ( -2147483648 .. 2147483647  )
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"DHCP Client Expire time."
+		::=  {  gatewayProdLanDhcpClientListEntry  5  }
+
+	gatewayProdLanStaticIpTable	OBJECT-TYPE
+		SYNTAX		SEQUENCE  OF  GatewayProdLanStaticIpEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"Static IP Address Assignment Table."
+		::=  { gatewayProdLanSetup  21 }
+
+	gatewayProdLanStaticIpEntry	OBJECT-TYPE
+		SYNTAX		GatewayProdLanStaticIpEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"Row Description"
+		INDEX		{  gatewayProdLanStaticIpIndex  }
+		::=  { gatewayProdLanStaticIpTable 1 }
+
+	GatewayProdLanStaticIpEntry  ::=  SEQUENCE {
+		gatewayProdLanStaticIpIndex  Integer32,
+		gatewayProdLanStaticAssignMacAddress  MacAddress,
+		gatewayProdLanStaticAssignIpAddress  IpAddress,
+		gatewayProdLanStaticAssignRowstatus  RowStatus
+		}
+
+
+	gatewayProdLanStaticIpIndex	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 128  )
+		MAX-ACCESS		read-only
+		STATUS			current
+		DESCRIPTION		"The Static IP table index.(1-128)."
+		::=  {  gatewayProdLanStaticIpEntry  1  }
+
+
+	gatewayProdLanStaticAssignMacAddress	OBJECT-TYPE
+		SYNTAX			MacAddress  ( SIZE ( 6  ) )
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"The Static IP Address Assignment's Mac Address."
+		::=  {  gatewayProdLanStaticIpEntry  2  }
+
+
+	gatewayProdLanStaticAssignIpAddress	OBJECT-TYPE
+		SYNTAX			IpAddress
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"The Static IP Address Assignment's IP Address."
+		::=  {  gatewayProdLanStaticIpEntry  3  }
+
+
+	gatewayProdLanStaticAssignRowstatus	OBJECT-TYPE
+		SYNTAX			RowStatus  { active ( 1 ) , notInService ( 2 ) , notReady ( 3 ) , createAndGo ( 4 ) , createAndWait ( 5 ) , destroy ( 6 ) }
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"The Static IP Address Assignment's Rowstatus."
+		::=  {  gatewayProdLanStaticIpEntry  4  }
+		
+	gatewayProdLanSetupApply	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Application configuration of gatewayProdLanSetup. Always return false when get"
+		::=  {  gatewayProdLanSetup  22  }
+
+	gatewayProdWanConnectMode	OBJECT-TYPE
+		SYNTAX			INTEGER  { static ( 0 ) , dhcp ( 1 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The WAN connect mode to Internet. The value list is:0-Static, 1-DHCP"
+		::=  {  gatewayProdWanSetup  1  }
+
+	gatewayProdWanStaticIP	OBJECT-TYPE
+		SYNTAX			IpAddress
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The wan static ip address, the scalar is only used for the wan is static mode."
+		::=  {  gatewayProdWanSetup  2  }
+
+	gatewayProdWanStaticNetmask	OBJECT-TYPE
+		SYNTAX			IpAddress
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The wan static netmask address, the scalar is only used for the wan is static mode."
+		::=  {  gatewayProdWanSetup  3  }
+
+	gatewayProdWanStaticGateway	OBJECT-TYPE
+		SYNTAX			IpAddress
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The wan static gateway address, the scalar is only used for the wan is static mode."
+		::=  {  gatewayProdWanSetup  4  }
+
+	gatewayProdWanDhcpDnsMode	OBJECT-TYPE
+		SYNTAX			INTEGER  { auto ( 0 ) , manual ( 1 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The dns mode,the scalar is only used for the wan is dhcp mode."
+		::=  {  gatewayProdWanSetup  5  }
+
+	gatewayProdWanDns1	OBJECT-TYPE
+		SYNTAX			IpAddress
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The dns primary dns server address,the scalar is only used for the wan is static mode or the wan is dhcp mode and the dns mode is manual."
+		::=  {  gatewayProdWanSetup  6  }
+
+	gatewayProdWanDns2	OBJECT-TYPE
+		SYNTAX			IpAddress
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The dns secondary dns server address,the scalar is only used for the wan is static mode or the wan is dhcp mode and the dns mode is manual."
+		::=  {  gatewayProdWanSetup  7  }
+
+	gatewayProdRoutedSubnetEnable	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or disable the Routed Subnet function."
+		::=  {  gatewayProdRoutedSubnetSetup  1  }
+
+	gatewayProdRoutedSubnetDhcpEnable	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or disable the Routed Subnet DHCP function."
+		::=  {  gatewayProdRoutedSubnetSetup  2  }
+
+	gatewayProdRoutedSubnetGateway	OBJECT-TYPE
+		SYNTAX			IpAddress
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The Routed Subnet Gateway Address."
+		::=  {  gatewayProdRoutedSubnetSetup  3  }
+
+	gatewayProdRoutedSubnetNetmask	OBJECT-TYPE
+		SYNTAX			IpAddress
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"The Routed Subnet Netmask Address."
+		::=  {  gatewayProdRoutedSubnetSetup  4  }
+	
+	gatewayProdDsLiteEnable	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or disable the Dual Stack Lite. The default value is false."
+		::=  {  gatewayProdDsLiteSetup  1  }
+		
+	gatewayProdDsLiteMode	OBJECT-TYPE
+		SYNTAX			INTEGER  { staticIp ( 0 ) , staticFqdn ( 1 ) , dhcp ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Set the Dual Stack Lite Config mode. Set value 0 to Static IP, set 1 to Static FQDN, set 2 to DHCP config"
+		::=  {  gatewayProdDsLiteSetup  2  }
+		
+	gatewayProdDsLiteAftrIpv6Address	OBJECT-TYPE
+		SYNTAX			DisplayString  ( SIZE ( 2 .. 46  ) )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Dual Stack Lite AFTR's (Address Family Transition Router) IPv6 address"
+		::=  {  gatewayProdDsLiteSetup  3  }
+		
+	gatewayProdDsLiteAftrFqdn	OBJECT-TYPE
+		SYNTAX			DisplayString  ( SIZE ( 1 .. 255  ) )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Dual Stack Lite AFTR's (Address Family Transition Router) FQDN (Fully Qualified Domain Name)"
+		::=  {  gatewayProdDsLiteSetup  4  }
+		
+	gatewayProdDsLiteMssClampingEnable	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or disable Dual Stack Lite TCP MSS (Maximum Segment Size) clamping"
+		::=  {  gatewayProdDsLiteSetup  5  }
+		
+	gatewayProdDsLiteTcpMssValue	OBJECT-TYPE
+		SYNTAX			Integer32
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Dual Stack Lite TCP MSS(Maximum Segment Size) value"
+		::=  {  gatewayProdDsLiteSetup  6  }
+		
+	--gatewayProdWirelessStationTable	OBJECT-TYPE
+	--	SYNTAX		SEQUENCE  OF  GatewayProdWirelessStationEntry
+	--	MAX-ACCESS	not-accessible
+	--	STATUS		current
+	--	DESCRIPTION	"Description"
+	--	::=  { gatewayProdWirelessSetup  1 }
+
+	--gatewayProdWirelessStationEntry	OBJECT-TYPE
+	--	SYNTAX		GatewayProdWirelessStationEntry
+	--	MAX-ACCESS	not-accessible
+	--	STATUS		current
+	--	DESCRIPTION	"Row Description"
+	--	INDEX		{  gatewayProdWirelessStationIndex  }
+	--	::=  { gatewayProdWirelessStationTable 1 }
+
+	--GatewayProdWirelessStationEntry  ::=  SEQUENCE {
+	--	gatewayProdWirelessStationIndex  Integer32,
+	--	gatewayProdWirelessStationMacAddress  MacAddress,
+	--	gatewayProdWirelessStationIpAddress  IpAddress,
+	--	gatewayProdWirelessStationInterface  INTEGER,
+	--	gatewayProdWirelessStationRSSI  Integer32
+	--	}
+
+	--gatewayProdWirelessStationIndex	OBJECT-TYPE
+	--	SYNTAX			Integer32  ( 1 .. 128  )
+	--	MAX-ACCESS		read-only
+	--	STATUS			current
+	--	DESCRIPTION		"Wireless Station Table index. which range is 1-128."
+	--	::=  {  gatewayProdWirelessStationEntry  1  }
+
+	--gatewayProdWirelessStationMacAddress	OBJECT-TYPE
+	--	SYNTAX			MacAddress  ( SIZE ( 6 ) )
+	--	MAX-ACCESS		read-only
+	--	STATUS			current
+	--	DESCRIPTION		"Wireless Station MAC Address."
+	--	::=  {  gatewayProdWirelessStationEntry  2  }
+
+	--gatewayProdWirelessStationIpAddress	OBJECT-TYPE
+	--	SYNTAX			IpAddress
+	--	MAX-ACCESS		read-only
+	--	STATUS			current
+	--	DESCRIPTION		"Wireless Station IP Address."
+	--	::=  {  gatewayProdWirelessStationEntry  3 }
+		
+	--gatewayProdWirelessStationInterface	OBJECT-TYPE
+	--	SYNTAX			INTEGER  { wlan-2G ( 1 ) , wlan-5G ( 2 ) }
+	--	MAX-ACCESS		read-only
+	--	STATUS			current
+	--	DESCRIPTION		"It indicate wireless station link to which interface."
+	--	::=  {  gatewayProdWirelessStationEntry  4  }
+
+	--gatewayProdWirelessStationRSSI	OBJECT-TYPE
+	--	SYNTAX			Integer32  ( -100 .. 0 )
+	--	MAX-ACCESS		read-only
+	--	STATUS			current
+	--	DESCRIPTION		"Wireless Station RSSI Value."
+	--	::=  {  gatewayProdWirelessStationEntry  5  }
+
+	gatewayProdFirewallSTBPassthroughTable	OBJECT-TYPE
+		SYNTAX		SEQUENCE  OF  GatewayProdFirewallSTBPassthroughEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"Description"
+		::=  { gatewayProdFirewallSetup  40 }
+
+	gatewayProdFirewallSTBPassthroughEntry	OBJECT-TYPE
+		SYNTAX		GatewayProdFirewallSTBPassthroughEntry
+		MAX-ACCESS	not-accessible
+		STATUS		current
+		DESCRIPTION	"Row Description"
+		INDEX		{  gatewayProdFirewallSTBPassthroughIndex  }
+		::=  { gatewayProdFirewallSTBPassthroughTable 1 }
+
+	GatewayProdFirewallSTBPassthroughEntry  ::=  SEQUENCE {
+		gatewayProdFirewallSTBPassthroughIndex  Integer32,
+		gatewayProdFirewallSTBPassthroughMac  OCTET STRING,
+		gatewayProdFirewallSTBPassthroughRowstatus  RowStatus
+		}
+
+
+	gatewayProdFirewallSTBPassthroughIndex	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 128  )
+		MAX-ACCESS		not-accessible
+		STATUS			current
+		DESCRIPTION		"The STB Passthrough Table Index."
+		::=  {  gatewayProdFirewallSTBPassthroughEntry  1  }
+
+
+	gatewayProdFirewallSTBPassthroughMac	OBJECT-TYPE
+		SYNTAX         OCTET STRING (SIZE (6))
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"The STB Passthrough STB."
+		::=  {  gatewayProdFirewallSTBPassthroughEntry  2  }
+
+
+	gatewayProdFirewallSTBPassthroughRowstatus	OBJECT-TYPE
+		SYNTAX			RowStatus
+		MAX-ACCESS		read-create
+		STATUS			current
+		DESCRIPTION		"Column Description"
+		::=  {  gatewayProdFirewallSTBPassthroughEntry  3  }
+	-- hsl add for GRE configuration,2021-11-20
+	gatewayProdGsfMode	OBJECT-TYPE
+		SYNTAX			INTEGER  { disable ( 0 ) , enable ( 1 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or disable the GSF for GRE."
+		::=  {  gatewayProdGreSetup  1  }
+	gatewayProdGreIPv4Enable	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or disable the IPv4 GRE."
+		::=  {  gatewayProdGreSetup  2  }
+	gatewayProdGreServerIPv4Addr	OBJECT-TYPE
+		SYNTAX			IpAddress
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"GRE server IPv4 address."
+		::=  {  gatewayProdGreSetup  3  }
+	gatewayProdGreIPv4MssClampingEnable	OBJECT-TYPE
+		SYNTAX			TruthValue  { true ( 1 ) , false ( 2 ) }
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"Enable or disable GRE MSS Clamping."
+		::=  {  gatewayProdGreSetup  4  }
+	gatewayProdGreIPv4TcpMssValue	OBJECT-TYPE
+		SYNTAX			Integer32  ( 1 .. 1500  )
+		MAX-ACCESS		read-write
+		STATUS			current
+		DESCRIPTION		"GRE TCP MSS value."
+		::=  {  gatewayProdGreSetup  5  }
+	-- add end
+END

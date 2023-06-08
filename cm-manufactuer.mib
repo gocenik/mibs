@@ -1,0 +1,14 @@
+PUMA6-MANUFACTURER-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+        enterprises FROM SNMPv2-SMI;
+
+-- TI Enterprise number is 294
+-- Enterprise number must be changed for other vendors
+
+        sdmc                     OBJECT IDENTIFIER ::= { enterprises 57345 }
+        networkProd        OBJECT IDENTIFIER ::= { sdmc 1 }
+        cableModem              OBJECT IDENTIFIER ::= { networkProd 1 }
+
+END
+

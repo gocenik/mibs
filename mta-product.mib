@@ -1,0 +1,275 @@
+EMTA-PACM-PRODUCTION-MIB    DEFINITIONS ::= BEGIN
+
+IMPORTS
+        MacAddress,
+        DateAndTime,
+        DisplayString,
+        TruthValue
+            FROM SNMPv2-TC
+        MODULE-IDENTITY,
+        OBJECT-TYPE,
+        Integer32,
+        Unsigned32,
+        IpAddress,
+        Gauge32,
+        enterprises
+            FROM SNMPv2-SMI;
+
+TenthdBm ::= TEXTUAL-CONVENTION
+        DISPLAY-HINT "d-1"
+        STATUS       current
+        DESCRIPTION
+            "This textual convention represents power levels that are 
+             normally expressed in dBm. Units are in tenths of a dBm; 
+             for example, -13.5 dBm will be represented as -135."
+        SYNTAX       Integer32
+
+sdmc                    OBJECT IDENTIFIER ::= { enterprises 57345 }
+networkProd            OBJECT IDENTIFIER ::= { sdmc 1 }
+cableModem             OBJECT IDENTIFIER ::= { networkProd 1 }
+
+pktc2000MtaProduction MODULE-IDENTITY
+        LAST-UPDATED    "200805040000Z"
+        ORGANIZATION    "TEXAS INSTRUMENTS"
+        CONTACT-INFO
+            "Igor Stadnik
+             Postal: TEXAS INSTRUMENTS
+             Hasadnaot 8, Herzlia 46766,
+             Israel. "
+
+        DESCRIPTION
+            " This is the private MIB module for the PUMA PACM Production"
+        ::= { cableModem 4 }
+
+modemProdMtaSetup            OBJECT IDENTIFIER ::= { pktc2000MtaProduction 1}
+modemProdMtaSaleSetup        OBJECT IDENTIFIER ::= { modemProdMtaSetup 4}
+
+
+modemProdMtaSigDevToneTable OBJECT-TYPE
+        SYNTAX       SEQUENCE OF ModemProdMtaSigDevToneEntry
+        MAX-ACCESS   not-accessible
+        STATUS       current
+        DESCRIPTION
+            "The Tone Table defines the various tone operations."
+        REFERENCE
+            "pktcSigDevToneTable from ECL-SP-MIB-SIG module."
+        ::= { modemProdMtaSaleSetup 1 }
+
+modemProdMtaSigDevToneEntry OBJECT-TYPE
+        SYNTAX       ModemProdMtaSigDevToneEntry
+        MAX-ACCESS   not-accessible
+        STATUS       current
+        DESCRIPTION
+            "The different tone types that can be provisioned based on 
+             country specific needs. 
+             Each entry contains the tone generation parameters for 
+             a specific Tone Type. The different parameters can be 
+             provisioned by the MTA configuration file based on 
+             country specific needs. An MTA MUST populate all entries 
+             of this table for each tone type."
+        INDEX { modemProdMtaSigDevToneType }
+        ::= { modemProdMtaSigDevToneTable 1 }
+ 
+ModemProdMtaSigDevToneEntry ::= SEQUENCE {
+    modemProdMtaSigDevToneType                      INTEGER,
+    modemProdMtaSigDevToneWholeToneRepeatCount      Unsigned32,
+    modemProdMtaSigDevToneSteady                    TruthValue
+    }
+
+modemProdMtaSigDevToneType OBJECT-TYPE
+        SYNTAX   INTEGER {
+                 busy(1),
+                 confirmation(2),
+                 dial(3),
+                 messageWaiting(4),
+                 offHookWarning(5),
+                 ringBack(6),
+                 reOrder(7),
+                 stutterdial(8),
+                 callWaiting1(9),
+                 callWaiting2(10),
+                 callWaiting3(11),
+                 callWaiting4(12),
+                 alertingSignal(13),
+                 specialDial(14),
+                 specialInfo(15),
+                 release(16),
+                 congestion(17),
+                 userDefined1(18),
+                 userDefined2(19),
+                 userDefined3(20),
+                 userDefined4(21)
+                 }
+        MAX-ACCESS   not-accessible
+        STATUS       current
+        DESCRIPTION
+            "Unique value that will correspond to the different 
+             tone types. These tones can be provisioned based on 
+             country specific needs. This object defines the type 
+             of tone being accessed."
+        ::= { modemProdMtaSigDevToneEntry 1 }
+
+modemProdMtaSigDevToneWholeToneRepeatCount OBJECT-TYPE
+        SYNTAX       Unsigned32 (0..5000)
+        MAX-ACCESS   read-write
+        STATUS       current
+        DESCRIPTION
+            "This is the repeat count." 
+        ::={ modemProdMtaSigDevToneEntry 2 }  
+
+modemProdMtaSigDevToneSteady OBJECT-TYPE
+        SYNTAX       TruthValue
+        MAX-ACCESS   read-write
+        STATUS       current
+        DESCRIPTION
+            "This is the steady tone."
+        ::={ modemProdMtaSigDevToneEntry 3 }
+
+modemProdMtaSigDevMultiFreqToneTable OBJECT-TYPE
+        SYNTAX       SEQUENCE OF ModemProdMtaSigDevMultiFreqToneEntry
+        MAX-ACCESS   not-accessible
+        STATUS       current
+        DESCRIPTION
+            "This MIB table defines the characteristics of tones 
+             with multiple frequencies."
+       REFERENCE
+           "pktcSigDevMultiFreqToneTable from ECL-SP-MIB-SIG module."
+       ::= { modemProdMtaSaleSetup 2 }
+
+modemProdMtaSigDevMultiFreqToneEntry OBJECT-TYPE
+        SYNTAX       ModemProdMtaSigDevMultiFreqToneEntry
+        MAX-ACCESS   not-accessible
+        STATUS       current
+        DESCRIPTION
+            "The different tone types with multiple frequencies
+             that can be provisioned based on country specific needs."
+       INDEX { modemProdMtaSigDevToneType, modemProdMtaSigDevToneNumber }
+       ::= { modemProdMtaSigDevMultiFreqToneTable 1 }
+
+ModemProdMtaSigDevMultiFreqToneEntry ::= SEQUENCE {
+    modemProdMtaSigDevToneNumber                    Unsigned32,
+    modemProdMtaSigDevToneFirstFreqValue            Unsigned32,
+    modemProdMtaSigDevToneSecondFreqValue           Unsigned32,
+    modemProdMtaSigDevToneThirdFreqValue            Unsigned32,
+    modemProdMtaSigDevToneFourthFreqValue           Unsigned32,
+    modemProdMtaSigDevToneFreqMode                  INTEGER,
+    modemProdMtaSigDevToneFreqAmpModePrtg           Integer32,
+    modemProdMtaSigDevToneDbLevel                   TenthdBm,
+    modemProdMtaSigDevToneFreqOnDuration            Unsigned32,
+    modemProdMtaSigDevToneFreqOffDuration           Unsigned32,
+    modemProdMtaSigDevToneFreqRepeatCount           Unsigned32
+   } 
+
+modemProdMtaSigDevToneNumber OBJECT-TYPE
+        SYNTAX       Unsigned32(1..8)
+        MAX-ACCESS   not-accessible
+        STATUS       current
+        DESCRIPTION
+            "This MIB Object represents the frequency reference 
+             of a multi-frequency tone."
+       ::= { modemProdMtaSigDevMultiFreqToneEntry 1 }
+
+modemProdMtaSigDevToneFirstFreqValue OBJECT-TYPE
+        SYNTAX       Unsigned32(0..4000)
+        MAX-ACCESS   read-write
+        STATUS       current
+        DESCRIPTION
+            "This MIB Object represents the value of the first 
+             frequency of a tone type. A value of Zero implies 
+             absence of the referenced frequency."
+        ::= { modemProdMtaSigDevMultiFreqToneEntry 2 }
+
+modemProdMtaSigDevToneSecondFreqValue OBJECT-TYPE
+        SYNTAX       Unsigned32(0..4000)
+        MAX-ACCESS   read-write
+        STATUS       current
+        DESCRIPTION
+            "This MIB Object represents the value of the second 
+            frequency of a tone type. A value of Zero implies 
+            absence of the referenced frequency."
+        ::= { modemProdMtaSigDevMultiFreqToneEntry 3 }
+
+modemProdMtaSigDevToneThirdFreqValue OBJECT-TYPE
+        SYNTAX       Unsigned32(0..4000)
+        MAX-ACCESS   read-write
+        STATUS       current
+        DESCRIPTION
+            "This MIB Object represents the value of the third 
+             frequency of a tone type. A value of Zero implies 
+             absence of the referenced frequency."
+        ::= { modemProdMtaSigDevMultiFreqToneEntry 4 }
+
+modemProdMtaSigDevToneFourthFreqValue OBJECT-TYPE
+        SYNTAX       Unsigned32(0..4000)
+        MAX-ACCESS   read-write
+        STATUS       current
+        DESCRIPTION
+            "This MIB Object represents the value of the fourth 
+             frequency of a tone type. A value of Zero implies 
+             absence of the referenced frequency."
+        ::= { modemProdMtaSigDevMultiFreqToneEntry 5 }
+
+modemProdMtaSigDevToneFreqMode OBJECT-TYPE
+        SYNTAX       INTEGER {
+                     firstModulatedBySecond (1),
+                     summation (2)
+                     }
+        MAX-ACCESS   read-write
+        STATUS       current
+        DESCRIPTION
+            "This MIB Object provides directive on the 
+             modulation or summation of the frequencies 
+             involved in the tone."
+        ::= { modemProdMtaSigDevMultiFreqToneEntry 6 }
+
+modemProdMtaSigDevToneFreqAmpModePrtg OBJECT-TYPE
+        SYNTAX       Integer32(0..100)
+        MAX-ACCESS   read-write
+        STATUS       current
+        DESCRIPTION
+            "This MIB Object represents the percentage of amplitude 
+             modulation applied to the second frequency."
+        ::= { modemProdMtaSigDevMultiFreqToneEntry 7 }
+
+modemProdMtaSigDevToneDbLevel OBJECT-TYPE
+        SYNTAX       TenthdBm (-250..-30)
+        UNITS        "dBm"
+        MAX-ACCESS   read-write
+        STATUS       current
+        DESCRIPTION
+            "This MIB Object contains the decibel level for each 
+             analog signal."
+        DEFVAL { -40 }
+        ::= { modemProdMtaSigDevMultiFreqToneEntry 8 }
+
+modemProdMtaSigDevToneFreqOnDuration OBJECT-TYPE
+        SYNTAX       Unsigned32(0..5000)
+        MAX-ACCESS   read-write
+        STATUS       current
+        DESCRIPTION
+            "This MIB Object represents the duration for which the 
+             frequency reference corresponding to the tone type 
+             is turned on."
+        ::= { modemProdMtaSigDevMultiFreqToneEntry 9 }
+
+modemProdMtaSigDevToneFreqOffDuration OBJECT-TYPE
+        SYNTAX       Unsigned32(0..5000)
+        MAX-ACCESS   read-write
+        STATUS       current
+        DESCRIPTION
+            "This MIB Object represents the duration for which the 
+             frequency reference corresponding to the tone type 
+             is turned off."
+        ::= { modemProdMtaSigDevMultiFreqToneEntry 10 }
+
+modemProdMtaSigDevToneFreqRepeatCount OBJECT-TYPE
+        SYNTAX       Unsigned32(0..5000)
+        MAX-ACCESS   read-write
+        STATUS       current
+        DESCRIPTION
+            "This MIB Object indicates the number of times 
+             to repeat the cadence cycle represented by the 
+             on/off durations." 
+        ::= { modemProdMtaSigDevMultiFreqToneEntry 11 }
+
+END
